@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>HEAC AI</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    box-sizing: border-box;
+    font-family: "Cairo", sans-serif;
+}
+
+body {
+    direction: rtl;
+    text-align: center;
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(135deg,#4f8cff,#6ad7e5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    background: #ffffff;
+    padding: 35px 30px;
+    border-radius: 18px;
+    width: 380px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    animation: fadeIn 0.8s ease;
+}
+
+@keyframes fadeIn {
+    from {opacity:0; transform: translateY(20px);}
+    to {opacity:1; transform: translateY(0);}
+}
+
+h2 {
+    margin-bottom: 10px;
+    color: #2c7be5;
+}
+
+p {
+    margin-bottom: 20px;
+    color: #555;
+    font-size: 14px;
+}
+
+input {
+    width: 100%;
+    padding: 10px 12px;
+    margin: 6px 0;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    outline: none;
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+input:focus {
+    border-color: #2c7be5;
+    box-shadow: 0 0 5px rgba(44,123,229,0.4);
+}
+
+button {
+    padding: 14px;
+    width: 100%;
+    background: linear-gradient(135deg,#2c7be5,#00c6ff);
+    color: white;
+    border: none;
+    margin-top: 12px;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(44,123,229,0.4);
+}
+
+.result {
+    margin-top: 20px;
+    text-align: right;
+    background: #f4f9ff;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h2>🎓HEAC AI</h2>
+<p>أدخل درجاتك من 100</p>
+
+<input type="number" id="math" placeholder="رياضيات">
+<input type="number" id="physics" placeholder="فيزياء">
+<input type="number" id="biology" placeholder="أحياء">
+<input type="number" id="chemistry" placeholder="كيمياء">
+<input type="number" id="arabic" placeholder="لغة عربية">
+<input type="number" id="computer" placeholder="حاسوب">
+<input type="number" id="history" placeholder="تاريخ">
+
+<button onclick="analyze()">تحليل الميول</button>
+
+<div id="output" class="result"></div>
+</div>
+
+<script>
+function analyze() {
+
+let grades = {
+math: Number(math.value),
+physics: Number(physics.value),
+biology: Number(biology.value),
+chemistry: Number(chemistry.value),
+arabic: Number(arabic.value),
+computer: Number(computer.value),
+history: Number(history.value)
+};
+
+let majors = [
+{name: "الهندسة", score: grades.math*0.6 + grades.physics*0.4},
+{name: "الطب", score: grades.biology*0.5 + grades.chemistry*0.5},
+{name: "علوم الحاسب", score: grades.math*0.5 + grades.computer*0.5},
+{name: "إدارة الأعمال", score: grades.math*0.4 + grades.arabic*0.6},
+{name: "الآداب والعلوم الإنسانية", score: grades.arabic*0.5 + grades.history*0.5}
+];
+
+majors.sort((a,b)=>b.score-a.score);
+
+let strengths = Object.entries(grades)
+.sort((a,b)=>b[1]-a[1])
+.slice(0,2)
+.map(x=>x[0]);
+
+let html = "<h3>أفضل التخصصات لك:</h3>";
+
+majors.slice(0,3).forEach((m,i)=>{
+html += `${i+1}- ${m.name} (نسبة التوافق: ${m.score.toFixed(1)}%)<br>`;
+});
+
+html += "<br><b>أقوى موادك:</b> " + strengths.join(" ، ");
+
+output.innerHTML = html;
+}
+</script>
+
+</body>
+</html>
